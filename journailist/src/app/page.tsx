@@ -1,5 +1,16 @@
-import { Button } from "flowbite-react";
+"use client";
 
-export default function Home() {
-  return <Button>Hello</Button>;
-}
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+const Page = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/video");
+  }, []);
+
+  return <div className="w-screen h-screen  bg-white"></div>;
+};
+
+export default Page;
