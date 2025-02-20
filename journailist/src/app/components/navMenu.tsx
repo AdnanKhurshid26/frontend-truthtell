@@ -27,14 +27,14 @@ const NavMenu = () => {
           className="w-24"
           color={currentPath == "video" ? "primary" : "secondary"}
         >
-          <Link href={"video"}>Video</Link>
+          <Link href={"/video"}>Video</Link>
         </Button>
         <Button
           className="w-24"
           size="sm"
           color={currentPath == "posts" ? "primary" : "secondary"}
         >
-          <Link href={"posts"}>Posts</Link>
+          <Link href={"/posts"}>Posts</Link>
         </Button>
       </div>
     </div>
