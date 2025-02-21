@@ -41,3 +41,4 @@ yarn-error.log*
 next-env.d.ts
 
 /src/package-lock.json
+/frontend/node_modules

@@ -14,53 +14,48 @@ interface AlertData {
   riskLevel: number;
   confidence: number;
   dataSource: string;
+  description: string;
   location: { lat: number; lng: number };
 }
 
-const generateFakeAlert = (): AlertData => {
-  const fakeClaims = [
-    "Government confirms UFO sighting in New York!",
-    "Celebrity found alive after death hoax!",
-    "New miracle drug claims to cure all diseases overnight!",
-    "Scientists discover a way to reverse aging!",
-    "Bitcoin will hit $1 million next year, experts say!",
-    "AI surpasses human intelligence!",
-    "New species found in the Amazon!",
-    "Stock market crashes overnight!",
-    "Scientists claim time travel is possible!",
-    "NASA announces a new habitable planet!",
-  ];
-  
-  const fakeReasons = ["Misinformation", "Clickbait", "Unverified Source", "Exaggeration", "Satire"];
-  const fakeSources = [
-    "www.fake-news-101.com",
-    "rumorwatch.net",
-    "viral-truth.ai",
-    "tabloid-express.com",
-  ];
-
-  return {
-    claim: fakeClaims[Math.floor(Math.random() * fakeClaims.length)],
-    flagReason: fakeReasons[Math.floor(Math.random() * fakeReasons.length)],
-    riskLevel: Math.floor(Math.random() * 100),
-    confidence: Math.floor(Math.random() * 100),
-    dataSource: fakeSources[Math.floor(Math.random() * fakeSources.length)],
-    location: { lat: Math.random() * 180 - 90, lng: Math.random() * 360 - 180 },
-  };
-};
+const API_URL = "https://y5pb6dc3avenbfpmp3bs3qro7i0rkvpy.lambda-url.ap-south-1.on.aws/";
 
 const Dashboard = () => {
   const [alerts, setAlerts] = useState<AlertData[]>([]);
 
   useEffect(() => {
-    setAlerts(Array.from({ length: 5 }, generateFakeAlert));
+    const fetchAlert = async () => {
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-    const interval = setInterval(() => {
-      setAlerts((prev) => {
-        if (prev.length >= 15) return prev;
-        return [generateFakeAlert(), ...prev];
-      });
-    }, 5000);
+        const data = await response.json();
+
+        // Ensure data is valid and in the expected format
+        if (!data || typeof data !== "object" || Array.isArray(data)) {
+          console.error("Invalid API response format:", data);
+          return;
+        }
+
+        const newAlert: AlertData = {
+          claim: data.claim || "Unknown claim",
+          flagReason: data.flagReason || "Unknown",
+          description: data.description || "",
+          riskLevel: data.riskLevel ?? 0, // Ensure number
+          confidence: data.confidence ?? 0, // Ensure number
+          dataSource: data.dataSource || "Unknown source",
+          location: data.location ?? { lat: 0, lng: 0 }, // Default location if missing
+        };
+
+        setAlerts((prevAlerts) => [newAlert, ...prevAlerts].slice(0, 15)); // Keep latest 15 alerts
+      } catch (error) {
+        console.error("Error fetching alert:", error);
+      }
+    };
+
+    fetchAlert(); // Fetch immediately on mount
+
+    const interval = setInterval(fetchAlert, 2000); // Fetch every 5 seconds
 
     return () => clearInterval(interval);
   }, []);
