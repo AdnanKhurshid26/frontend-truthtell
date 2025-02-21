@@ -42,7 +42,7 @@ const PostDetails: React.FC = () => {
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/posts/addRatingAndReview/${postId}`,
         {
-          rating: vote,
+          rating: vote === "0" ? 10 : 0,
           review: comment,
         }
       );
@@ -84,7 +84,7 @@ const PostDetails: React.FC = () => {
           >
             {`Fake (
   ${
-    post.ratingList.filter((rating) => rating === "0").length +
+    post.ratingList?.filter((r) => Number(r) >= 5.0).length +
     (vote === "0" ? 1 : 0)
   }
 )`}
@@ -97,7 +97,7 @@ const PostDetails: React.FC = () => {
           >
             {`True (
   ${
-    post.ratingList.filter((rating) => rating === "1").length +
+    post.ratingList?.filter((r) => Number(r) <= 5.0).length +
     (vote === "1" ? 1 : 0)
   }
 )`}
@@ -128,12 +128,12 @@ const PostDetails: React.FC = () => {
               >
                 <span
                   className={`w-12 text-center px-2 py-1 text-xs font-bold uppercase rounded ${
-                    post.ratingList[index] === "0"
+                    Number(post.ratingList[index]) >= 5.0
                       ? "bg-red-500 text-white"
                       : "bg-green-500 text-white"
                   }`}
                 >
-                  {post.ratingList[index] === "0" ? "Fake" : "True"}
+                  {Number(post.ratingList[index]) >= 5.0 ? "Fake" : "True"}
                 </span>
                 <div>{review}</div>
               </div>

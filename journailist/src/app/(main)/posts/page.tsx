@@ -50,9 +50,9 @@ const Page = () => {
           posts.map((post) => {
             // Count "Fake" and "True" votes properly
             const fakeCount =
-              post.ratingList?.filter((r) => r === "0").length || 0;
+              post.ratingList?.filter((r) => Number(r) >= 5.0).length || 0;
             const trueCount =
-              post.ratingList?.filter((r) => r === "1").length || 0;
+              post.ratingList?.filter((r) => Number(r) <= 5.0).length || 0;
 
             // Check for invalid values
             const invalidCount =
