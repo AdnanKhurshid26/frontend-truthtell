@@ -58,7 +58,7 @@ const PostDetails: React.FC = () => {
   return (
     <div className="flex flex-1 h-screen overflow-hidden">
       <div className="w-full h-full overflow-y-auto border-r p-4 flex flex-col gap-4">
-        <h1 className="text-2xl font-bold mt-4">{post.title}</h1>
+        <h1 className="text-2xl font-bold mt-4 text-brand">{post.title}</h1>
         <Image
           src={post.imageUrl}
           alt={post.title}
@@ -68,13 +68,13 @@ const PostDetails: React.FC = () => {
           unoptimized
           sizes="100%"
         />
-        <div className="h-96 bg-gray-100 rounded p-4 mb-4">
-          {post.description}
-        </div>
+        <div>{post.description}</div>
       </div>
 
       <div className="w-4/12 p-6 flex flex-col gap-4 sticky top-0 h-screen overflow-y-auto">
-      <div className="text-xl font-semibold text-brand">Give your vote:&nbsp;</div>
+        <div className="text-xl font-semibold text-brand">
+          Give your vote:&nbsp;
+        </div>
         <div className="flex gap-4">
           <Button
             size="sm"
