@@ -54,10 +54,10 @@ const Page = () => {
             const trueCount =
               post.ratingList?.filter((r) => Number(r) <= 5.0).length || 0;
 
-            // Check for invalid values
-            const invalidCount =
-              post.ratingList?.filter((r) => r !== "0" && r !== "1").length ||
-              0;
+            // // Check for invalid values
+            // const invalidCount =
+            //   post.ratingList?.filter((r) => r !== "0" && r !== "1").length ||
+            //   0;
 
             let tag = "Unverified";
             if (fakeCount > trueCount) {
@@ -110,12 +110,12 @@ const Page = () => {
                     </button>
                   </div>
 
-                  {/* Show invalid votes if any */}
+                  {/* Show invalid votes if any
                   {invalidCount > 0 && (
                     <p className="text-xs text-gray-500 mt-2">
                       ⚠️ {invalidCount} unverified votes detected
                     </p>
-                  )}
+                  )} */}
                 </div>
               </div>
             );

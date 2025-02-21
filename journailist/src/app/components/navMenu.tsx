@@ -20,13 +20,6 @@ const NavMenu = () => {
         >
           JournAiLlist
         </Link>
-        <Button
-          className="w-24"
-          size="sm"
-          color={currentPath == "posts" ? "primary" : "secondary"}
-        >
-          <Link href={"/dashboard"}>Dashboard</Link>
-        </Button>
       </div>
       <div className="flex gap-4 justify-center items-center">
         <Button
@@ -42,6 +35,13 @@ const NavMenu = () => {
           color={currentPath == "posts" ? "primary" : "secondary"}
         >
           <Link href={"/posts"}>Posts</Link>
+        </Button>
+        <Button
+          className="w-24"
+          size="sm"
+          color={currentPath == "dashboard" ? "primary" : "secondary"}
+        >
+          <Link href={"/dashboard"}>Dashboard</Link>
         </Button>
       </div>
     </div>
