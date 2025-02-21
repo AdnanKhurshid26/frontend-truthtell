@@ -1,7 +1,7 @@
 "use client";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import ReactPlayer from "react-player";
 
 type Timestamp = {
   time: number;
@@ -15,51 +15,34 @@ const timestamps: Timestamp[] = [
   { time: 90, label: "Another fake news" },
 ];
 
+const MjpegStream = ({ url }: { url: string }) => {
+  return (
+    <div className="flex justify-center items-center w-full h-auto bg-black">
+      <img src={url} alt="Live Stream" className="w-full h-auto rounded-lg" />
+    </div>
+  );
+};
+
 export default function VideoPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const video = searchParams.get("video");
+  const videoUrl = searchParams.get("video");
 
-  const playerRef = useRef<ReactPlayer | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  const [playing, setPlaying] = useState(false);
-
-  const handleTimestampClick = (time: number, index: number) => {
-    if (playerRef.current) {
-      playerRef.current.seekTo(time, "seconds");
-      setPlaying(true); // Ensure the video starts playing
-    }
-
-    // Scroll to the selected card
-    const card = document.getElementById(`card-${index}`);
-    if (card && scrollRef.current) {
-      scrollRef.current.scrollTo({
-        top: card.offsetTop - scrollRef.current.offsetTop,
-        behavior: "smooth",
-      });
-    }
-  };
 
   useEffect(() => {
-    if (!video) {
+    if (!videoUrl) {
       router.push("/"); // Redirect if no video URL
     }
-  }, [video, router]);
+  }, [videoUrl, router]);
 
-  if (!video || typeof video !== "string") return <p>Loading...</p>;
+  if (!videoUrl || typeof videoUrl !== "string") return <p>Loading...</p>;
 
   return (
     <div className="flex flex-1 items-center gap-4 p-4">
-      {/* Video Player */}
+      {/* Video Player / MJPEG Stream */}
       <div className="w-7/12 h-full flex flex-col justify-start items-center gap-4">
-        <ReactPlayer
-          ref={playerRef}
-          url={video}
-          controls
-          playing={playing}
-          width="100%"
-          height="auto"
-        />
+        <MjpegStream url={videoUrl} />
       </div>
 
       {/* Scrollable Section */}
@@ -75,7 +58,6 @@ export default function VideoPage() {
           >
             <span>{ts.label}</span>
             <button
-              onClick={() => handleTimestampClick(ts.time, index)}
               className="text-blue-600 hover:underline"
             >
               {new Date(ts.time * 1000).toISOString().substr(14, 5)}
